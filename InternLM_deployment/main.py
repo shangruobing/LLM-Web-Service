@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.json.ensure_ascii = False
 CORS(app)
 
-MODEL_PATH = "internlm-chat-20b"
+MODEL_PATH = "InternLM-chat-20b"
 
 
 def __init_internlm():
@@ -36,4 +36,4 @@ def chat():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=9000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

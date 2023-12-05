@@ -6,7 +6,7 @@ app = Flask(__name__)
 app.json.ensure_ascii = False
 CORS(app)
 
-MODEL_PATH = "chatglm3-6b"
+MODEL_PATH = "ChatGLM3-6B"
 
 
 def __init_chatglm():
@@ -36,4 +36,4 @@ def chat():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=6000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

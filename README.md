@@ -8,14 +8,14 @@ This repository doesn't provide the download of LLMs, you can download them from
 
 For each model, this repository provides the RESTful APIs for calling.
 
-we use `Ping` API to test the connection of service, and use `Chat` API to chat with LLM.
+We use `Ping` API to test the connection of service, and use `Chat` API to chat with LLM.
 
 > For each model, this repository provides the following APIs to use.
 
 - GET http://127.0.0.1:5000/api/llm-name/ping
 - POST http://127.0.0.1:5000/api/llm-name/chat
 
-# Get Started
+# Quick Start
 
 ## Requirement
 
@@ -23,13 +23,13 @@ LLMs always has many parameters, so you must have at least one GPU to run them.
 
 This table shows the GPU usage of each model on our experimental devices.
 
-|                                     LLM                                      |       Device        | GPU Usage | Port |
-|:----------------------------------------------------------------------------:|:-------------------:|:---------:|------|
-|     [Llama-2-7b-chat](https://huggingface.co/meta-llama/Llama-2-7b-chat)     | Nvidia RTX 4090 24G |    16G    | 5000 |
-|           [chatglm3-7b](https://huggingface.co/THUDM/chatglm3-6b)            | Nvidia RTX 4090 24G |    12G    | 6000 |
-| [Baichuan2-13B-Chat](https://huggingface.co/baichuan-inc/Baichuan2-13B-Chat) |   Nvidia A100 80G   |    55G    | 7000 |
-|          [Qwen-14B-Chat](https://huggingface.co/Qwen/Qwen-14B-Chat)          |   Nvidia A100 80G   |           | 8000 |
-| [internlm-chat-20b-4bit](https://huggingface.co/internlm/internlm-chat-20b)  |   Nvidia A100 80G   |           | 9000 |
+|                                     LLM                                      |       Device        | GPU Usage |
+|:----------------------------------------------------------------------------:|:-------------------:|:---------:|
+|     [Llama-2-7b-chat](https://huggingface.co/meta-llama/Llama-2-7b-chat)     | Nvidia RTX 4090 24G |    16G    |
+|           [ChatGLM3-7b](https://huggingface.co/THUDM/chatglm3-6b)            | Nvidia RTX 4090 24G |    12G    |
+| [Baichuan2-13B-Chat](https://huggingface.co/baichuan-inc/Baichuan2-13B-Chat) |   Nvidia A100 80G   |    55G    |
+|          [Qwen-14B-Chat](https://huggingface.co/Qwen/Qwen-14B-Chat)          |   Nvidia A100 80G   |    55G    |
+| [InternLM-chat-20b-4bit](https://huggingface.co/internlm/internlm-chat-20b)  |   Nvidia A100 80G   |    78G    |
 
 ## Install
 
