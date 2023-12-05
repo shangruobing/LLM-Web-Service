@@ -1,30 +1,30 @@
 from flask_cors import CORS
 from flask import Flask, request, jsonify
-from transformers import AutoTokenizer, AutoModel
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
 app = Flask(__name__)
 app.json.ensure_ascii = False
 CORS(app)
 
-MODEL_PATH = "chatglm3-6b"
+MODEL_PATH = "Qwen-14B-Chat"
 
 
-def __init_chatglm():
+def __init_Qwen():
     tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, trust_remote_code=True)
-    model = AutoModel.from_pretrained(MODEL_PATH, trust_remote_code=True, device='cuda:0')
-    model = model.eval()
+    model = AutoModelForCausalLM.from_pretrained(MODEL_PATH, device_map="auto", trust_remote_code=True).eval()
+    model = model.to('cuda:0')
     return tokenizer, model
 
 
-tokenizer, model = __init_chatglm()
+tokenizer, model = __init_Qwen()
 
 
-@app.route(f'/api/chatglm/ping', methods=['GET'])
+@app.route(f'/api/qwen/ping', methods=['GET'])
 def ping():
     return jsonify({"message": f"{MODEL_PATH} is running!"}), 200
 
 
-@app.route('/api/chatglm/chat', methods=['POST'])
+@app.route('/api/qwen/chat', methods=['POST'])
 def chat():
     try:
         question = request.get_json().get("question")
@@ -36,4 +36,4 @@ def chat():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=6000, debug=True)
+    app.run(host='0.0.0.0', port=8000, debug=True)

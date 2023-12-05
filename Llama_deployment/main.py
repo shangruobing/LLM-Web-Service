@@ -1,5 +1,5 @@
-from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flask import Flask, request, jsonify
 from typing import List, Optional, Union
 
 from llama import Llama, Dialog
@@ -20,8 +20,9 @@ max_batch_size (int, optional): The maximum batch size for generating sequences.
 max_gen_len (int, optional): The maximum length of generated sequences. 
     If None, it will be set to the model's max sequence length. Defaults to None.
 """
-ckpt_dir: str = "llama-2-7b-chat"
-tokenizer_path: str = "./llama-2-7b-chat/tokenizer.model"
+ckpt_dir: str = "Llama-2-7b-chat"
+tokenizer_path: str = "Llama-2-7b-chat/tokenizer.model"
+MODEL_PATH: str = "Llama-2-7b-chat"
 temperature: float = 0
 top_p: float = 0.9
 max_seq_len: int = 550
@@ -64,7 +65,7 @@ def chat_with_llama(question: Union[str, List[Message]]):
 
 @app.route('/api/llama/ping', methods=['GET'])
 def ping():
-    return jsonify({"message": "llama-2 is running!"}), 200
+    return jsonify({"message": f"{MODEL_PATH} is running!"}), 200
 
 
 @app.route('/api/llama/chat', methods=['POST'])

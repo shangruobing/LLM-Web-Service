@@ -21,11 +21,15 @@ we use `Ping` API to test the connection of service, and use `Chat` API to chat 
 
 LLMs always has many parameters, so you must have at least one GPU to run them.
 
-|     LLM      |       Device        | GPU Usage |
-|:------------:|:-------------------:|:---------:|
-|  llama2-7b   | Nvidia RTX 4090 24G |    16G    |
-| chatglm2-7b  | Nvidia RTX 4090 24G |    12G    |
-| baichuan-13b |   Nvidia A100 80G   |    55G    |
+This table shows the GPU usage of each model on our experimental devices.
+
+|                                     LLM                                      |       Device        | GPU Usage | Port |
+|:----------------------------------------------------------------------------:|:-------------------:|:---------:|------|
+|     [Llama-2-7b-chat](https://huggingface.co/meta-llama/Llama-2-7b-chat)     | Nvidia RTX 4090 24G |    16G    | 5000 |
+|           [chatglm3-7b](https://huggingface.co/THUDM/chatglm3-6b)            | Nvidia RTX 4090 24G |    12G    | 6000 |
+| [Baichuan2-13B-Chat](https://huggingface.co/baichuan-inc/Baichuan2-13B-Chat) |   Nvidia A100 80G   |    55G    | 7000 |
+|          [Qwen-14B-Chat](https://huggingface.co/Qwen/Qwen-14B-Chat)          |   Nvidia A100 80G   |           | 8000 |
+| [internlm-chat-20b-4bit](https://huggingface.co/internlm/internlm-chat-20b)  |   Nvidia A100 80G   |           | 9000 |
 
 ## Install
 
@@ -38,7 +42,11 @@ pip install -r requirements.txt
 ## Launch
 
 ```shell
+# Enter the directory of your model
+cd llm_deployment
+# Launch the service
 python main.py
+# or detach running
 nohup python main.py > log.txt 2>&1 &disown
 ```
 
@@ -46,7 +54,10 @@ nohup python main.py > log.txt 2>&1 &disown
 
 ```shell
 curl http://127.0.0.1:5000/api/llm-name/ping
-curl -X POST -H "Content-Type: application/json" -d '{"question": "Hello!"}'http://127.0.0.1:5000/api/llm-name/chat
+curl -X POST \
+     -H "Content-Type: application/json" \
+     -d '{"question": "Hello!"}' \
+     http://127.0.0.1:5000/api/llm-name/chat
 ```
 
 ## Use with Python

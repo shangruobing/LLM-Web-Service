@@ -1,12 +1,12 @@
 import torch
-from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flask import Flask, request, jsonify
 from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
 
 app = Flask(__name__)
 CORS(app)
 
-MODEL_PATH = ""
+MODEL_PATH = "Baichuan2-13B-Chat"
 
 
 def __init_baichuan():
@@ -23,7 +23,7 @@ tokenizer, model = __init_baichuan()
 
 @app.route('/api/baichuan/ping', methods=['GET'])
 def ping():
-    return jsonify({"message": "baichuan is running!"}), 200
+    return jsonify({"message": f"{MODEL_PATH} is running!"}), 200
 
 
 @app.route('/api/baichuan/chat', methods=['POST'])
@@ -38,4 +38,4 @@ def chat():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000, debug=True)
+    app.run(host='0.0.0.0', port=7000, debug=True)
