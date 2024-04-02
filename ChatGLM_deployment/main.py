@@ -19,7 +19,17 @@ def __init_chatglm():
 tokenizer, model = __init_chatglm()
 
 
-@app.route(f'/api/chatglm/ping', methods=['GET'])
+@app.route('/chat')
+def get_chat():
+    try:
+        question = request.args.get('question')
+        response, history = model.chat(tokenizer, question, history=[])
+        return jsonify({"message": response, "history": history}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/api/chatglm/ping', methods=['GET'])
 def ping():
     return jsonify({"message": f"{MODEL_PATH} is running!"}), 200
 
@@ -36,4 +46,4 @@ def chat():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)

@@ -19,7 +19,7 @@ def __init_Qwen():
 tokenizer, model = __init_Qwen()
 
 
-@app.route(f'/api/qwen/ping', methods=['GET'])
+@app.route('/api/qwen/ping', methods=['GET'])
 def ping():
     return jsonify({"message": f"{MODEL_PATH} is running!"}), 200
 
@@ -36,4 +36,4 @@ def chat():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)

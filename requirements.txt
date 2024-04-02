@@ -3,3 +3,8 @@ flask-cors
 transformers
 torch
 requests
+
+fastapi
+sse_starlette
+uvicorn
+langserve

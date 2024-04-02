@@ -25,11 +25,11 @@ This table shows the GPU usage of each model on our experimental devices.
 
 |                                     LLM                                      |       Device        | GPU Usage |
 |:----------------------------------------------------------------------------:|:-------------------:|:---------:|
-|     [Llama-2-7b-chat](https://huggingface.co/meta-llama/Llama-2-7b-chat)     | Nvidia RTX 4090 24G |    16G    |
-|           [ChatGLM3-7b](https://huggingface.co/THUDM/chatglm3-6b)            | Nvidia RTX 4090 24G |    12G    |
-| [Baichuan2-13B-Chat](https://huggingface.co/baichuan-inc/Baichuan2-13B-Chat) |   Nvidia A100 80G   |    55G    |
-|          [Qwen-14B-Chat](https://huggingface.co/Qwen/Qwen-14B-Chat)          |   Nvidia A100 80G   |    55G    |
-| [InternLM-chat-20b-4bit](https://huggingface.co/internlm/internlm-chat-20b)  |   Nvidia A100 80G   |    78G    |
+|     [Llama-2-7b-chat](https://huggingface.co/meta-llama/Llama-2-7b-chat)     | NVIDIA RTX 4090 24G |    16G    |
+|           [ChatGLM3-7b](https://huggingface.co/THUDM/chatglm3-6b)            | NVIDIA RTX 4090 24G |    12G    |
+| [Baichuan2-13B-Chat](https://huggingface.co/baichuan-inc/Baichuan2-13B-Chat) |   NVIDIA A100 80G   |    55G    |
+|          [Qwen-14B-Chat](https://huggingface.co/Qwen/Qwen-14B-Chat)          |   NVIDIA A100 80G   |    55G    |
+| [InternLM-chat-20b-4bit](https://huggingface.co/internlm/internlm-chat-20b)  |   NVIDIA A100 80G   |    78G    |
 
 ## Install
 
@@ -47,7 +47,7 @@ cd llm_deployment
 # Launch the service
 python main.py
 # or detach running
-nohup python main.py > log.txt 2>&1 &disown
+nohup python main.py > log.txt 2>&1 &
 ```
 
 ## Use with Shell
