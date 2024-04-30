@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <link rel="icon" type="image/svg+xml" href="../static/favicon.ico"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <title>LLM Web Service</title>
+  <style>
+      * {
+          box-sizing: border-box;
+          max-width: 100%;
+          overflow: hidden;
+          font-family: system-ui, 'Arial';
+      }
+
+      body {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          background-color: #f1f8ff;
+      }
+
+      ::-webkit-scrollbar {
+          background-color: #c0c4cc;
+          border-radius: 10px;
+          width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+          background-color: #f2f4f6;
+          border-radius: 10px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+          background-color: #c0c4cc;
+          border-radius: 10px;
+      }
+
+      textarea {
+          border: none;
+          height: 60px;
+          border-radius: 10px;
+          width: 100%;
+          resize: none;
+      }
+
+      #loading {
+          display: none;
+          text-align: center;
+          font-style: italic;
+          padding: 20px;
+          font-weight: bold;
+          background-color: #f1f8ff;
+          border-radius: 20px;
+          box-shadow: 0 1px 1px #0000000f, 0 2px 5px #0000000f;
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 999;
+      }
+
+      .container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-between;
+          box-sizing: border-box;
+          padding: 40px 60px 0 60px;
+          height: 100vh;
+          background-color: #f1f8ff;
+      }
+
+      .chat-container {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          justify-content: space-between;
+          box-sizing: border-box;
+          width: 100%;
+          height: 100%;
+          background-color: #f1f8ff;
+      }
+
+      .header {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          height: 50px;
+          font-weight: 700;
+          font-size: 16px;
+      }
+
+      .footer {
+          position: relative;
+          margin-top: 10px;
+          padding: 10px 15px;
+          width: 90%;
+          height: 20vh;
+          border-radius: 10px;
+          background-color: white;
+          box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.06), 0 2px 5px 0 rgba(0, 0, 0, 0.06);
+      }
+
+
+      textarea:focus-visible {
+          outline: none;
+      }
+
+      .input {
+          padding: 2px 80px 2px 2px;
+          min-height: 80px;
+          height: 100%;
+          font-size: 16px;
+          line-height: 24px;
+          max-height: 300px;
+          border: none;
+          color: black;
+          resize: none;
+      }
+
+      .button {
+          position: absolute;
+          width: 80px;
+          bottom: 8px;
+          right: 12px;
+          height: 36px;
+          border: none;
+          border-radius: 20px;
+          background-color: #409eff;
+          color: white;
+          font-size: 16px;
+          font-weight: 600;
+      }
+
+      .content {
+          display: flex;
+          justify-content: center;
+          max-height: calc(100% - 50px);
+          height: calc(100% - 50px);
+          box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.06), 0 2px 5px 0 rgba(0, 0, 0, 0.06);
+          border-radius: 10px;
+          overflow: hidden;
+          flex: 1;
+          width: 90%;
+      }
+
+      .chat-box {
+          overflow-y: scroll;
+          height: 100%;
+          padding: 8px 16px;
+          width: 100%;
+          border-radius: 10px;
+          background: white;
+          scroll-behavior: smooth;
+
+          .message {
+              display: flex;
+              margin: 5px 0;
+              width: 100%;
+          }
+
+          .message-body {
+              margin: 10px;
+              padding: 0 12px;
+              border-radius: 10px;
+              text-align: left;
+              font-weight: 500;
+              line-height: 1.3em;
+              font-size: 0.9em;
+              max-width: 100%;
+              word-wrap: break-word;
+          }
+
+          .my_message {
+              justify-content: flex-end;
+              padding-left: 36px;
+          }
+
+          .my_message .message-body {
+              background-color: #409eff;
+              color: white;
+          }
+
+          .robot_message {
+              justify-content: flex-start;
+              padding-right: 36px;
+          }
+
+          .robot_message .message-body {
+              background: #f0f2f4;
+              text-align: left;
+          }
+      }
+
+      .header-title {
+          margin: 0 5px;
+          padding: 0 5px;
+          font-size: 24px;
+      }
+
+      .copyright {
+          /*position: fixed;*/
+          /*bottom: 10px;*/
+          padding: 20px;
+          /*padding-bottom: 10px;*/
+          font-size: 12px;
+          color: #999999;
+      }
+
+      @media screen and (max-width: 600px) {
+          .container {
+              padding: 0;
+              /*padding: 20px 0;*/
+          }
+
+          .header-title {
+              font-size: 16px;
+          }
+
+          /*.copyright {*/
+          /*    bottom: 4px;*/
+          /*}*/
+      }
+  </style>
+  <script>
+      const appendMessage = (cls, text) => {
+          const chatContainer = document.getElementById('chat-box')
+          const outerDiv = document.createElement('div')
+          outerDiv.classList.add('message', cls)
+          const innerDiv = document.createElement('div')
+          innerDiv.classList.add('message-body')
+          innerDiv.innerHTML = marked.parse(text);
+          outerDiv.appendChild(innerDiv)
+          chatContainer.appendChild(outerDiv)
+      }
+
+      const appendUserMessage = (text) => {
+          appendMessage('my_message', text)
+      }
+      const appendRobotMessage = (text) => {
+          appendMessage('robot_message', text)
+      }
+
+      const sendMessage = async () => {
+          const textarea = document.getElementById('intent')
+          const button = document.getElementById('submit')
+          const loading = document.getElementById('loading')
+          if (textarea.value) {
+              button.disabled = true
+              loading.style.display = 'block'
+              console.log(textarea.value)
+              try {
+                  appendUserMessage(textarea.value)
+                  const response = await fetch('/api/llm/chat', {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({question: textarea.value})
+                  })
+                  console.log(response)
+                  const responseData = await response.json()
+                  console.log(responseData)
+                  const answer = responseData.message
+                  console.log(answer)
+                  appendRobotMessage(answer)
+                  const chatContainer = document.getElementById('chat-box')
+                  chatContainer.scrollTop = chatContainer.scrollHeight
+                  textarea.value = ''
+              } catch (error) {
+                  console.error('Error during fetch operation:', error)
+              } finally {
+                  button.disabled = false
+                  loading.style.display = 'none'
+              }
+          }
+      }
+  </script>
+</head>
+<body>
+<div class="container">
+  <div class="chat-container">
+    <header class="header">
+      <span class="header-title"> LLM Web Service </span>
+    </header>
+    <div class="content">
+      <div id="chat-box" class="chat-box"></div>
+    </div>
+    <footer class="footer">
+      <textarea id="intent" class="input" required placeholder="Message LLM..."></textarea>
+      <button id="submit" class="button" onclick="sendMessage()">Send</button>
+    </footer>
+    <div id="loading">Loading...</div>
+  </div>
+  <div class="copyright">All Rights Reserved © Ruobing Shang</div>
+</div>
+</body>
+</html>

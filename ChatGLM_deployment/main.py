@@ -1,10 +1,11 @@
-from flask_cors import CORS
-from flask import Flask, request, jsonify
+from flask import request, jsonify
 from transformers import AutoTokenizer, AutoModel
 
-app = Flask(__name__)
-app.json.ensure_ascii = False
-CORS(app)
+import sys
+
+sys.path.append("..")
+
+from webservice import WebService
 
 MODEL_PATH = "ChatGLM3-6B"
 
@@ -18,13 +19,14 @@ def __init_chatglm():
 
 tokenizer, model = __init_chatglm()
 
+webService = WebService(__name__, MODEL_PATH, tokenizer, model)
 
-@app.route('/api/chatglm/ping', methods=['GET'])
-def ping():
-    return jsonify({"message": f"{MODEL_PATH} is running!"}), 200
+app = webService.create_app()
+
+app.view_functions.pop('chat')
 
 
-@app.route('/api/chatglm/chat', methods=['POST'])
+@app.route('/api/llm/chat', endpoint="chat", methods=['POST'])
 def chat():
     try:
         question = request.get_json().get("question")

@@ -1,13 +1,14 @@
-from flask_cors import CORS
-from flask import Flask, request, jsonify
+from flask import request, jsonify
 from typing import List, Optional, Union
 
 from llama import Llama, Dialog
 from llama.generation import Message
 
-app = Flask(__name__)
-app.json.ensure_ascii = False
-CORS(app)
+import sys
+
+sys.path.append("..")
+
+from webservice import WebService
 
 """
 Entry point of the program for generating text using a pretrained model.
@@ -63,12 +64,14 @@ def chat_with_llama(question: Union[str, List[Message]]):
     )
 
 
-@app.route('/api/llama/ping', methods=['GET'])
-def ping():
-    return jsonify({"message": f"{MODEL_PATH} is running!"}), 200
+webService = WebService(__name__, MODEL_PATH, None, generator)
+
+app = webService.create_app()
+
+app.view_functions.pop('chat')
 
 
-@app.route('/api/llama/chat', methods=['POST'])
+@app.route('/api/llm/chat', endpoint="chat", methods=['POST'])
 def chat():
     try:
         question = request.get_json().get("question")
@@ -77,7 +80,7 @@ def chat():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route('/api/llama/dialog', methods=['POST'])
+@app.route('/api/llm/dialog', endpoint="dialog", methods=['POST'])
 def dialog():
     try:
         dialog = request.get_json().get("dialog")

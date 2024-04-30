@@ -1,10 +1,11 @@
-from flask_cors import CORS
-from flask import Flask, request, jsonify
+from flask import request, jsonify
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-app = Flask(__name__)
-app.json.ensure_ascii = False
-CORS(app)
+import sys
+
+sys.path.append("..")
+
+from webservice import WebService
 
 MODEL_PATH = "Qwen-14B-Chat"
 
@@ -18,13 +19,14 @@ def __init_Qwen():
 
 tokenizer, model = __init_Qwen()
 
+webService = WebService(__name__, MODEL_PATH, tokenizer, model)
 
-@app.route('/api/qwen/ping', methods=['GET'])
-def ping():
-    return jsonify({"message": f"{MODEL_PATH} is running!"}), 200
+app = webService.create_app()
+
+app.view_functions.pop('chat')
 
 
-@app.route('/api/qwen/chat', methods=['POST'])
+@app.route('/api/llm/chat', endpoint="chat", methods=['POST'])
 def chat():
     try:
         question = request.get_json().get("question")
