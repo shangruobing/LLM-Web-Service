@@ -1,4 +1,3 @@
-import json
 from abc import ABC, abstractmethod
 from typing import Mapping, Any, Optional, List
 
@@ -14,14 +13,14 @@ class BaseLLM(LLM, ABC):
     @property
     def _llm_type(self) -> str:
         """
-        模型名称声明
+        Declaration of the model type
         """
         return "BaseLLM"
 
     @property
     def _identifying_params(self) -> Mapping[str, Any]:
         """
-        模型参数
+        Declaration of the model params
         """
         return {"name": self._llm_type}
 
@@ -33,30 +32,30 @@ class BaseLLM(LLM, ABC):
             **kwargs: Any,
     ) -> str:
         """
-        Override Langchain的LLM模型调用接口
+        Override Langchain's LLM model call interface
         """
         return self._chat(prompt)
 
-    def request(self, url: str, prompt: str):
+    def request(self, url: str, prompt: str) -> dict:
         """
-        请求HTTP接口
+        Request HTTP interface
         Args:
             url: URL
-            prompt: 提示词
+            prompt: prompt to send
         """
         try:
             headers = {"Content-Type": "application/json"}
-            data = {"question": prompt}
-            return requests.post(url, headers=headers, data=json.dumps(data)).json()
+            payload = {"question": prompt}
+            return requests.post(url, headers=headers, json=payload).json()
         except Exception:
             raise ConnectionError(f"{self._llm_type} connect fail, URL: {url}")
 
     @abstractmethod
-    def _chat(self, prompt: str):
+    def _chat(self, prompt: str) -> str:
         """
-        调用模型进行对话
+        Chat with Model
         Args:
-            prompt: 提示词
+            prompt: prompt
         """
         raise NotImplemented
 
@@ -68,7 +67,7 @@ class ChatGLM(BaseLLM):
     def _llm_type(self) -> str:
         return "ChatGLM3-6b"
 
-    def _chat(self, prompt: str):
+    def _chat(self, prompt: str) -> str:
         response = self.request(url=self.url, prompt=prompt)
         return response.get("message")
 
@@ -88,4 +87,4 @@ add_routes(
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="localhost", port=7000)
+    uvicorn.run(app, host="localhost", port=8000)
