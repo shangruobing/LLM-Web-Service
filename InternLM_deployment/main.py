@@ -6,7 +6,7 @@ import sys
 
 sys.path.append("..")
 
-from webservice import WebService
+from core.webservice import WebService
 
 MODEL_PATH = "InternLM-chat-20b"
 

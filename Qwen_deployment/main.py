@@ -5,7 +5,7 @@ import sys
 
 sys.path.append("..")
 
-from webservice import WebService
+from core.webservice import WebService
 
 MODEL_PATH = "Qwen-14B-Chat"
 

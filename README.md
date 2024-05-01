@@ -53,11 +53,11 @@ nohup python main.py > log.txt 2>&1 &
 ## Use with Shell
 
 ```shell
-curl http://127.0.0.1:5000/api/llm-name/ping
+curl http://127.0.0.1:5000/api/llm/ping
 curl -X POST \
      -H "Content-Type: application/json" \
      -d '{"question": "Hello!"}' \
-     http://127.0.0.1:5000/api/llm-name/chat
+     http://127.0.0.1:5000/api/llm/chat
 ```
 
 ## Use with Python
@@ -69,14 +69,14 @@ import requests
 
 def ping():
     print("ping")
-    url = "http://127.0.0.1:5000/api/llm-name/ping"
+    url = "http://127.0.0.1:5000/api/llm/ping"
     response = requests.get(url)
     print(response.text)
 
 
 def chat():
     print("chat")
-    url = "http://127.0.0.1:5000/api/llm-name/chat"
+    url = "http://127.0.0.1:5000/api/llm/chat"
     headers = {"Content-Type": "application/json"}
     data = {"question": "Hello!"}
     response = requests.post(url, headers=headers, data=json.dumps(data))

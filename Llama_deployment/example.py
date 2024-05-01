@@ -4,14 +4,14 @@ import requests
 
 def ping():
     print("ping")
-    url = "http://127.0.0.1:5000/api/llama/ping"
+    url = "http://127.0.0.1:5000/api/llm/ping"
     response = requests.get(url)
     print(response.text)
 
 
 def chat():
     print("chat")
-    url = "http://127.0.0.1:5000/api/llama/chat"
+    url = "http://127.0.0.1:5000/api/llm/chat"
     headers = {"Content-Type": "application/json"}
     data = {"question": "Hello!"}
     response = requests.post(url, headers=headers, data=json.dumps(data))
@@ -20,7 +20,7 @@ def chat():
 
 def dialog():
     print("dialog")
-    url = "http://127.0.0.1:5000/api/llama/dialog"
+    url = "http://127.0.0.1:5000/api/llm/dialog"
     headers = {"Content-Type": "application/json"}
     data = {
         "dialog": [

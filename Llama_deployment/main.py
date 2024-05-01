@@ -8,7 +8,7 @@ import sys
 
 sys.path.append("..")
 
-from webservice import WebService
+from core.webservice import WebService
 
 """
 Entry point of the program for generating text using a pretrained model.
