@@ -4,16 +4,29 @@ LLM-Web-Service deploy various open-source Large Language Models (LLMs) with Fla
 
 # Introduction
 
-This repository doesn't provide the download of LLMs, you can download them from their official homepage or Huggingface.
+We provide a simple browser interface and RESTful APIs for you to chat with LLMs.
+> This repository doesn't provide the download of LLMs.
+> You can download them from their official homepage or Huggingface.
 
-For each model, this repository provides the RESTful APIs for calling.
+## API
+
+For each model, we provide the RESTful APIs for calling.
 
 We use `Ping` API to test the connection of service, and use `Chat` API to chat with LLM.
 
-> For each model, this repository provides the following APIs to use.
+> For each model, we provide the following APIs to use.
 
-- GET http://127.0.0.1:5000/api/llm-name/ping
-- POST http://127.0.0.1:5000/api/llm-name/chat
+- `GET` http://127.0.0.1:5000/api/llm/ping
+- `POST` http://127.0.0.1:5000/api/llm/chat
+
+## Browser Interface
+
+We provide a simple browser interface for you to chat with LLMs.
+You can access it by visiting http://127.0.0.1:5000.
+
+## LangServe
+
+You can lunch the LangsServe in `serve.py` file.
 
 # Quick Start
 
@@ -41,9 +54,14 @@ pip install -r requirements.txt
 
 ## Launch
 
+1. Assume your model is named `Chatbot`.
+2. Create a folder named `Chatbot_deplotment` in `weights` folder.
+3. Place the model weight files in the `Chatbot_deplotment` folder.
+4. Write the model loading code in `model.py`.
+5. Configure the model name in `config.py`.
+6. Execute the following command to launch the service.
+
 ```shell
-# Enter the directory of your model
-cd llm_deployment
 # Launch the service
 python main.py
 # or detach running
@@ -86,5 +104,32 @@ def chat():
 if __name__ == '__main__':
     ping()
     chat()
+
+```
+
+## Coding Instruction
+
+You need to implement the `AbstractModel` class in `core/model.py` and write the model loading code in `model.py`.
+
+```python
+from transformers import AutoTokenizer, AutoModel
+
+from core.model import AbstractModel
+
+MODEL_PATH = "Your-Weight-Path"
+
+
+class ChatModel(AbstractModel):
+
+    def _load_model(self):
+        tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, trust_remote_code=True)
+        model = AutoModel.from_pretrained(MODEL_PATH, trust_remote_code=True, device='cuda:0')
+        model = model.eval()
+        self.model = model
+        self.tokenizer = tokenizer
+
+    def chat_with_model(self, question, history):
+        message, history = self.model.chat(self.tokenizer, question, history)
+        return message, history
 
 ```

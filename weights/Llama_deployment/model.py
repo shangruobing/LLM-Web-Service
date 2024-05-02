@@ -1,14 +1,8 @@
-from flask import request, jsonify
 from typing import List, Optional, Union
 
+from core.model import AbstractModel
 from llama import Llama, Dialog
 from llama.generation import Message
-
-import sys
-
-sys.path.append("..")
-
-from core.webservice import WebService
 
 """
 Entry point of the program for generating text using a pretrained model.
@@ -31,20 +25,7 @@ max_batch_size: int = 8
 max_gen_len: Optional[int] = None
 
 
-def __init_llama():
-    generator = Llama.build(
-        ckpt_dir=ckpt_dir,
-        tokenizer_path=tokenizer_path,
-        max_seq_len=max_seq_len,
-        max_batch_size=max_batch_size,
-    )
-    return generator
-
-
-generator = __init_llama()
-
-
-def chat_with_llama(question: Union[str, List[Message]]):
+def chat_with_llama(generator, question: Union[str, List[Message]]):
     if isinstance(question, list):
         dialogs: List[Dialog] = [
             question
@@ -64,30 +45,16 @@ def chat_with_llama(question: Union[str, List[Message]]):
     )
 
 
-webService = WebService(__name__, MODEL_PATH, None, generator)
+class ChatModel(AbstractModel):
 
-app = webService.create_app()
+    def _load_model(self):
+        self.model = Llama.build(
+            ckpt_dir=ckpt_dir,
+            tokenizer_path=tokenizer_path,
+            max_seq_len=max_seq_len,
+            max_batch_size=max_batch_size,
+        )
 
-app.view_functions.pop('chat')
-
-
-@app.route('/api/llm/chat', endpoint="chat", methods=['POST'])
-def chat():
-    try:
-        question = request.get_json().get("question")
-        return jsonify({"message": chat_with_llama(question=question)}), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-@app.route('/api/llm/dialog', endpoint="dialog", methods=['POST'])
-def dialog():
-    try:
-        dialog = request.get_json().get("dialog")
-        return jsonify({"message": chat_with_llama(question=dialog)}), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    def chat_with_model(self, question, history):
+        response = chat_with_llama(self.model, question=question)
+        return response, None
