@@ -60,12 +60,12 @@ class BaseLLM(LLM, ABC):
         raise NotImplemented
 
 
-class ChatGLM(BaseLLM):
-    url = "http://127.0.0.1:5000/api/chatglm/chat"
+class ChatModel(BaseLLM):
+    url = "http://127.0.0.1:5000/api/llm/chat"
 
     @property
     def _llm_type(self) -> str:
-        return "ChatGLM3-6b"
+        return "LangServe-ChatModel"
 
     def _chat(self, prompt: str) -> str:
         response = self.request(url=self.url, prompt=prompt)
@@ -80,8 +80,8 @@ app = FastAPI(
 
 add_routes(
     app,
-    ChatGLM(),
-    path="/chatglm",
+    ChatModel(),
+    path="/llm",
 )
 
 if __name__ == "__main__":

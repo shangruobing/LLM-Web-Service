@@ -4,6 +4,7 @@ transformers
 torch
 requests
 
+# if you want to use langserve
 fastapi
 sse_starlette
 uvicorn

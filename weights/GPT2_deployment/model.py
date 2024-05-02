@@ -13,6 +13,6 @@ class ChatModel(AbstractModel):
         self.text_generator = TextGenerationPipeline(self.model, self.tokenizer)
 
     def chat_with_model(self, question, history):
-        outputs = self.text_generator(text_inputs=question, max_length=256, do_sample=False)
+        outputs = self.text_generator(text_inputs=question, max_length=256, do_sample=True)
         message = outputs[0].get("generated_text").replace(" ", "")
         return message, None

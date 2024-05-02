@@ -27,6 +27,7 @@ You can access it by visiting http://127.0.0.1:5000.
 ## LangServe
 
 You can lunch the LangsServe in `serve.py` file.
+You can access it by visiting http://127.0.0.1:8000/llm/playground.
 
 # Quick Start
 
