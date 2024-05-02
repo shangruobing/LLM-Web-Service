@@ -15,9 +15,9 @@ max_batch_size (int, optional): The maximum batch size for generating sequences.
 max_gen_len (int, optional): The maximum length of generated sequences. 
     If None, it will be set to the model's max sequence length. Defaults to None.
 """
-ckpt_dir: str = "Llama-2-7b-chat"
-tokenizer_path: str = "Llama-2-7b-chat/tokenizer.model"
-MODEL_PATH: str = "Llama-2-7b-chat"
+
+ckpt_dir: str = "weights/Llama_deployment/Llama-2-7b-chat"
+tokenizer_path: str = "weights/Llama_deployment/Llama-2-7b-chat/tokenizer.model"
 temperature: float = 0
 top_p: float = 0.9
 max_seq_len: int = 550

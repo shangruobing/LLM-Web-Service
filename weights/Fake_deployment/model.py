@@ -1,6 +1,6 @@
 from core.model import AbstractModel
 
-MODEL_PATH = "Fake-LLM"
+MODEL_PATH = "weights/Fake_deployment/Fake-LLM"
 
 
 class FakeTokenizer:
@@ -18,7 +18,5 @@ class FakeModel:
 class ChatModel(AbstractModel):
 
     def _load_model(self):
-        tokenizer = FakeTokenizer()
-        model = FakeModel()
-        self.model = model
-        self.tokenizer = tokenizer
+        self.tokenizer = FakeTokenizer()
+        self.model = FakeModel()

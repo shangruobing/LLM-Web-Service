@@ -3,13 +3,13 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
 
 from core.model import AbstractModel
 
-MODEL_PATH = "Baichuan2-13B-Chat"
+MODEL_PATH = "weights/Baichuan_deployment/Baichuan2-13B-Chat"
 
 
 class ChatModel(AbstractModel):
 
     def _load_model(self):
-        tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, use_fast=False, trust_remote_code=True)
+        self.tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, use_fast=False, trust_remote_code=True)
         model = AutoModelForCausalLM.from_pretrained(MODEL_PATH,
                                                      device_map="auto",
                                                      torch_dtype=torch.bfloat16,
@@ -17,7 +17,6 @@ class ChatModel(AbstractModel):
         model.generation_config = GenerationConfig.from_pretrained(MODEL_PATH)
         model = model.to('cuda:0')
         self.model = model
-        self.tokenizer = tokenizer
 
     def chat_with_model(self, question, history):
         messages = [{"role": "user", "content": question}]
