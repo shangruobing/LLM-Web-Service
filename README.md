@@ -82,7 +82,6 @@ curl -X POST \
 ## Use with Python
 
 ```python
-import json
 import requests
 
 
@@ -98,7 +97,7 @@ def chat():
     url = "http://127.0.0.1:5000/api/llm/chat"
     headers = {"Content-Type": "application/json"}
     data = {"question": "Hello!"}
-    response = requests.post(url, headers=headers, data=json.dumps(data))
+    response = requests.post(url, headers=headers, json=data)
     print(response.text)
 
 
