@@ -185,13 +185,14 @@
         border: none;
         color: black;
         resize: none;
+        overflow-y: auto;
       }
 
       .button {
         position: absolute;
         width: 80px;
         bottom: 10px;
-        right: 12px;
+        right: 28px;
         height: 36px;
         border: none;
         border-radius: 20px;
@@ -236,6 +237,14 @@
     </style>
     <script>
       const appendMessage = (cls, text) => {
+        if (text.includes('!DOCTYPE html')) {
+          appendIframeMessage(cls, text)
+        } else {
+          appendMarkdownMessage(cls, text)
+        }
+      }
+
+      const appendMarkdownMessage = (cls, text) => {
         const chatContainer = document.getElementById('chat-box')
         const outerDiv = document.createElement('div')
         outerDiv.classList.add('message', cls)
@@ -246,9 +255,26 @@
         chatContainer.appendChild(outerDiv)
       }
 
+      const appendIframeMessage = (cls, text) => {
+        const chatContainer = document.getElementById('chat-box')
+        const outerDiv = document.createElement('div')
+        outerDiv.classList.add('message', cls)
+        const innerDiv = document.createElement('iframe')
+        innerDiv.classList.add('message-body')
+        innerDiv.style.height = '400px'
+        innerDiv.style.width = '400px'
+        outerDiv.appendChild(innerDiv)
+        chatContainer.appendChild(outerDiv)
+        const iframeWindow = innerDiv.contentWindow
+        iframeWindow.document.open()
+        iframeWindow.document.write(text)
+        iframeWindow.document.close()
+      }
+
       const appendUserMessage = (text) => {
         appendMessage('my_message', text)
       }
+
       const appendRobotMessage = (text) => {
         appendMessage('robot_message', text)
       }
