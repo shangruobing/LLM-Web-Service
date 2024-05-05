@@ -177,7 +177,8 @@
 
       .input {
         padding: 2px 80px 2px 2px;
-        min-height: 40px;
+        min-height: 36px;
+        height: 36px;
         font-size: 16px;
         line-height: 24px;
         max-height: 180px;
@@ -189,7 +190,7 @@
       .button {
         position: absolute;
         width: 80px;
-        bottom: 8px;
+        bottom: 10px;
         right: 12px;
         height: 36px;
         border: none;
@@ -282,7 +283,7 @@
             button.disabled = false
             loading.style.display = 'none'
             textarea.value = ''
-            textarea.style.height = 'auto'
+            textarea.style.height = '36px'
             const chatContainer = document.getElementById('chat-box')
             chatContainer.scrollTop = chatContainer.scrollHeight
           }
@@ -315,7 +316,6 @@
   <script>
     const textarea = document.getElementById('intent')
     textarea.addEventListener('input', function () {
-      this.style.height = 'auto'
       this.style.height = this.scrollHeight + 'px'
     })
   </script>
