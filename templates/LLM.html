@@ -46,7 +46,6 @@
         min-width: 375px;
         padding: 40px 60px 0 60px;
         height: 100vh;
-        background-color: #f1f8ff;
       }
 
       .chat-container {
@@ -58,7 +57,6 @@
         width: 100%;
         max-width: 1200px;
         height: calc(100% - 50px);
-        background-color: #f1f8ff;
         overflow: visible;
       }
 
@@ -85,14 +83,10 @@
       .content {
         display: flex;
         justify-content: center;
-        max-height: calc(100% - 50px - 20vh - 10px);
-        height: calc(100% - 50px - 20vh - 10px);
         box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.06), 0 2px 5px 0 rgba(0, 0, 0, 0.06);
         border-radius: 10px;
-        overflow: hidden;
         flex: 1;
         width: 90%;
-        margin-bottom: 10px;
 
         .chat-box {
           overflow-y: auto;
@@ -131,6 +125,9 @@
             background-color: #409eff;
             color: white;
           }
+          .my_message :nth-child(n) {
+            color: white;
+          }
 
           .robot_message {
             justify-content: flex-start;
@@ -154,10 +151,10 @@
 
       .footer {
         position: relative;
-        margin-top: 10px;
+        margin-top: 24px;
         padding: 10px 15px;
         width: 90%;
-        height: 20vh;
+        max-height: 200px;
         border-radius: 10px;
         background-color: white;
         box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.06), 0 2px 5px 0 rgba(0, 0, 0, 0.06);
@@ -169,7 +166,6 @@
 
       textarea {
         border: none;
-        height: 60px;
         border-radius: 10px;
         width: 100%;
         resize: none;
@@ -181,11 +177,10 @@
 
       .input {
         padding: 2px 80px 2px 2px;
-        min-height: 80px;
-        height: 100%;
+        min-height: 40px;
         font-size: 16px;
         line-height: 24px;
-        max-height: 300px;
+        max-height: 180px;
         border: none;
         color: black;
         resize: none;
@@ -280,15 +275,16 @@
             const answer = responseData.message
             console.log(answer)
             appendRobotMessage(answer)
-            const chatContainer = document.getElementById('chat-box')
-            chatContainer.scrollTop = chatContainer.scrollHeight
-            textarea.value = ''
           } catch (error) {
             console.error('Error during fetch operation:', error)
             appendRobotMessage(error.message)
           } finally {
             button.disabled = false
             loading.style.display = 'none'
+            textarea.value = ''
+            textarea.style.height = 'auto'
+            const chatContainer = document.getElementById('chat-box')
+            chatContainer.scrollTop = chatContainer.scrollHeight
           }
         }
       }
@@ -316,4 +312,11 @@
       <div class="copyright">All Rights Reserved © Ruobing Shang</div>
     </div>
   </body>
+  <script>
+    const textarea = document.getElementById('intent')
+    textarea.addEventListener('input', function () {
+      this.style.height = 'auto'
+      this.style.height = this.scrollHeight + 'px'
+    })
+  </script>
 </html>
