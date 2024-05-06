@@ -74,7 +74,7 @@
         margin: 0 5px;
         padding: 0 5px;
         font-size: 24px;
-        background: -webkit-linear-gradient(left, rgb(24, 24, 232), #3b91e7, rgb(11, 168, 230));
+        background: linear-gradient(to left, rgb(24, 24, 232), #3b91e7, rgb(11, 168, 230));
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -177,8 +177,8 @@
 
       .input {
         padding: 2px 80px 2px 2px;
-        min-height: 36px;
-        height: 36px;
+        /* min-height: 36px; */
+        /* height: 36px; */
         font-size: 16px;
         line-height: 24px;
         max-height: 180px;
@@ -190,7 +190,7 @@
 
       .button {
         position: absolute;
-        width: 80px;
+        width: 72px;
         bottom: 10px;
         right: 28px;
         height: 36px;
@@ -309,7 +309,6 @@
             button.disabled = false
             loading.style.display = 'none'
             textarea.value = ''
-            textarea.style.height = '36px'
             const chatContainer = document.getElementById('chat-box')
             chatContainer.scrollTop = chatContainer.scrollHeight
           }
@@ -342,6 +341,7 @@
   <script>
     const textarea = document.getElementById('intent')
     textarea.addEventListener('input', function () {
+      this.style.height = 'auto'
       this.style.height = this.scrollHeight + 'px'
     })
   </script>
