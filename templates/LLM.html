@@ -1,348 +1,350 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="../static/robot.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <title>LLM Web Service</title>
-    <style>
+<head>
+  <meta charset="UTF-8"/>
+  <link rel="icon" type="image/svg+xml" href="../static/robot.svg"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <title>LLM Web Service</title>
+  <style>
       * {
-        box-sizing: border-box;
-        max-width: 100%;
-        overflow: hidden;
-        font-family: system-ui, 'Arial';
+          box-sizing: border-box;
+          max-width: 100%;
+          overflow: hidden;
+          font-family: system-ui, 'Arial';
       }
 
       body {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        background-color: #f1f8ff;
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          background-color: #f1f8ff;
       }
 
       ::-webkit-scrollbar {
-        background-color: #c0c4cc;
-        border-radius: 10px;
-        width: 8px;
+          background-color: #c0c4cc;
+          border-radius: 10px;
+          width: 8px;
       }
 
       ::-webkit-scrollbar-track {
-        background-color: #f2f4f6;
-        border-radius: 10px;
+          background-color: #f2f4f6;
+          border-radius: 10px;
       }
 
       ::-webkit-scrollbar-thumb {
-        background-color: #c0c4cc;
-        border-radius: 10px;
+          background-color: #c0c4cc;
+          border-radius: 10px;
       }
 
       .container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-between;
-        box-sizing: border-box;
-        min-width: 375px;
-        padding: 40px 60px 0 60px;
-        height: 100vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-between;
+          box-sizing: border-box;
+          min-width: 375px;
+          padding: 40px 60px 0 60px;
+          height: 100vh;
       }
 
       .chat-container {
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        justify-content: space-between;
-        box-sizing: border-box;
-        width: 100%;
-        max-width: 1200px;
-        height: calc(100% - 50px);
-        overflow: visible;
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          justify-content: space-between;
+          box-sizing: border-box;
+          width: 100%;
+          max-width: 1200px;
+          height: calc(100% - 50px);
+          overflow: visible;
       }
 
       .header {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 50px;
-        font-weight: 700;
-        font-size: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          height: 50px;
+          font-weight: 700;
+          font-size: 16px;
       }
 
       .header-title {
-        margin: 0 5px;
-        padding: 0 5px;
-        font-size: 24px;
-        background: linear-gradient(to left, rgb(24, 24, 232), #3b91e7, rgb(11, 168, 230));
-        background-clip: text;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+          margin: 0 5px;
+          padding: 0 5px;
+          font-size: 24px;
+          background: linear-gradient(to left, rgb(24, 24, 232), #3b91e7, rgb(11, 168, 230));
+          background-clip: text;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
       }
 
       .content {
-        display: flex;
-        justify-content: center;
-        box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.06), 0 2px 5px 0 rgba(0, 0, 0, 0.06);
-        border-radius: 10px;
-        flex: 1;
-        width: 90%;
-
-        .chat-box {
-          overflow-y: auto;
-          padding: 8px 16px;
-          width: 100%;
-          max-height: 100%;
-          height: auto;
+          display: flex;
+          justify-content: center;
+          box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.06), 0 2px 5px 0 rgba(0, 0, 0, 0.06);
           border-radius: 10px;
-          background: white;
-          scroll-behavior: smooth;
+          flex: 1;
+          width: 90%;
 
-          .message {
-            display: flex;
-            margin: 5px 0;
-            width: 100%;
-          }
+          .chat-box {
+              overflow-y: auto;
+              padding: 8px 16px;
+              width: 100%;
+              max-height: 100%;
+              height: auto;
+              border-radius: 10px;
+              background: white;
+              scroll-behavior: smooth;
 
-          .message-body {
-            margin: 10px;
-            padding: 0 12px;
-            border-radius: 10px;
-            text-align: left;
-            font-weight: 500;
-            line-height: 1.3em;
-            font-size: 0.9em;
-            max-width: 100%;
-            word-wrap: break-word;
-          }
+              .message {
+                  display: flex;
+                  margin: 5px 0;
+                  width: 100%;
+              }
 
-          .my_message {
-            justify-content: flex-end;
-            padding-left: 36px;
-          }
+              .message-body {
+                  margin: 10px;
+                  padding: 0 12px;
+                  border-radius: 10px;
+                  text-align: left;
+                  font-weight: 500;
+                  line-height: 1.3em;
+                  font-size: 0.9em;
+                  max-width: 100%;
+                  word-wrap: break-word;
+              }
 
-          .my_message .message-body {
-            background-color: #409eff;
-            color: white;
-          }
-          .my_message :nth-child(n) {
-            color: white;
-          }
+              .my_message {
+                  justify-content: flex-end;
+                  padding-left: 36px;
+              }
 
-          .robot_message {
-            justify-content: flex-start;
-            padding-right: 36px;
-          }
+              .my_message .message-body {
+                  background-color: #409eff;
+                  color: white;
+              }
 
-          .robot_message .message-body {
-            background: #f0f2f4;
-            text-align: left;
+              .my_message :nth-child(n) {
+                  color: white;
+              }
+
+              .robot_message {
+                  justify-content: flex-start;
+                  padding-right: 36px;
+              }
+
+              .robot_message .message-body {
+                  background: #f0f2f4;
+                  text-align: left;
+              }
           }
-        }
       }
 
       pre,
       code {
-        font-family: monospace;
-        white-space: pre-wrap;
-        font-size: 14px;
-        line-height: 20px;
+          font-family: monospace;
+          white-space: pre-wrap;
+          font-size: 14px;
+          line-height: 20px;
       }
 
       .footer {
-        position: relative;
-        margin-top: 24px;
-        padding: 10px 15px;
-        width: 90%;
-        max-height: 200px;
-        border-radius: 10px;
-        background-color: white;
-        box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.06), 0 2px 5px 0 rgba(0, 0, 0, 0.06);
+          position: relative;
+          margin-top: 24px;
+          padding: 10px 15px;
+          width: 90%;
+          max-height: 200px;
+          border-radius: 10px;
+          background-color: white;
+          box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.06), 0 2px 5px 0 rgba(0, 0, 0, 0.06);
       }
 
       footer:hover {
-        outline: #409eff auto 1px;
+          outline: #409eff auto 1px;
       }
 
       textarea {
-        border: none;
-        border-radius: 10px;
-        width: 100%;
-        resize: none;
+          border: none;
+          border-radius: 10px;
+          width: 100%;
+          resize: none;
       }
 
       textarea:focus-visible {
-        outline: none;
+          outline: none;
       }
 
       .input {
-        padding: 2px 80px 2px 2px;
-        /* min-height: 36px; */
-        /* height: 36px; */
-        font-size: 16px;
-        line-height: 24px;
-        max-height: 180px;
-        border: none;
-        color: black;
-        resize: none;
-        overflow-y: auto;
+          padding: 2px 80px 2px 2px;
+          /* min-height: 36px; */
+          /* height: 36px; */
+          font-size: 16px;
+          line-height: 24px;
+          max-height: 180px;
+          border: none;
+          color: black;
+          resize: none;
+          overflow-y: auto;
       }
 
       .button {
-        position: absolute;
-        width: 72px;
-        bottom: 10px;
-        right: 28px;
-        height: 36px;
-        border: none;
-        border-radius: 20px;
-        background-color: #409eff;
-        color: white;
-        font-size: 16px;
-        font-weight: 600;
+          position: absolute;
+          width: 72px;
+          bottom: 10px;
+          right: 28px;
+          height: 36px;
+          border: none;
+          border-radius: 20px;
+          background-color: #409eff;
+          color: white;
+          font-size: 16px;
+          font-weight: 600;
       }
 
       #loading {
-        display: none;
-        text-align: center;
-        font-style: italic;
-        padding: 20px;
-        font-weight: bold;
-        background-color: #f1f8ff;
-        border-radius: 20px;
-        box-shadow: 0 1px 1px #0000000f, 0 2px 5px #0000000f;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 999;
+          display: none;
+          text-align: center;
+          font-style: italic;
+          padding: 20px;
+          font-weight: bold;
+          background-color: #f1f8ff;
+          border-radius: 20px;
+          box-shadow: 0 1px 1px #0000000f, 0 2px 5px #0000000f;
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 999;
       }
 
       .copyright {
-        padding: 20px;
-        height: 50px;
-        font-size: 12px;
-        color: #999999;
+          padding: 20px;
+          height: 50px;
+          font-size: 12px;
+          color: #999999;
       }
 
       @media screen and (max-width: 600px) {
-        .container {
-          padding: 0;
-        }
+          .container {
+              padding: 0;
+          }
 
-        .header-title {
-          font-size: 16px;
-        }
+          .header-title {
+              font-size: 16px;
+          }
       }
-    </style>
-    <script>
+  </style>
+  <script>
       const appendMessage = (cls, text) => {
-        if (text.includes('!DOCTYPE html')) {
-          appendIframeMessage(cls, text)
-        } else {
-          appendMarkdownMessage(cls, text)
-        }
+          if (text.includes('!DOCTYPE html')) {
+              appendIframeMessage(cls, text)
+          } else {
+              appendMarkdownMessage(cls, text)
+          }
       }
 
       const appendMarkdownMessage = (cls, text) => {
-        const chatContainer = document.getElementById('chat-box')
-        const outerDiv = document.createElement('div')
-        outerDiv.classList.add('message', cls)
-        const innerDiv = document.createElement('div')
-        innerDiv.classList.add('message-body')
-        innerDiv.innerHTML = marked.parse(text)
-        outerDiv.appendChild(innerDiv)
-        chatContainer.appendChild(outerDiv)
+          const chatContainer = document.getElementById('chat-box')
+          const outerDiv = document.createElement('div')
+          outerDiv.classList.add('message', cls)
+          const innerDiv = document.createElement('div')
+          innerDiv.classList.add('message-body')
+          innerDiv.innerHTML = marked.parse(text)
+          outerDiv.appendChild(innerDiv)
+          chatContainer.appendChild(outerDiv)
       }
 
       const appendIframeMessage = (cls, text) => {
-        const chatContainer = document.getElementById('chat-box')
-        const outerDiv = document.createElement('div')
-        outerDiv.classList.add('message', cls)
-        const innerDiv = document.createElement('iframe')
-        innerDiv.classList.add('message-body')
-        innerDiv.style.height = '400px'
-        innerDiv.style.width = '400px'
-        outerDiv.appendChild(innerDiv)
-        chatContainer.appendChild(outerDiv)
-        const iframeWindow = innerDiv.contentWindow
-        iframeWindow.document.open()
-        iframeWindow.document.write(text)
-        iframeWindow.document.close()
+          const chatContainer = document.getElementById('chat-box')
+          const outerDiv = document.createElement('div')
+          outerDiv.classList.add('message', cls)
+          const innerDiv = document.createElement('iframe')
+          innerDiv.classList.add('message-body')
+          innerDiv.style.height = '400px'
+          innerDiv.style.width = '400px'
+          outerDiv.appendChild(innerDiv)
+          chatContainer.appendChild(outerDiv)
+          const iframeWindow = innerDiv.contentWindow
+          iframeWindow.document.open()
+          iframeWindow.document.write(text)
+          iframeWindow.document.close()
       }
 
       const appendUserMessage = (text) => {
-        appendMessage('my_message', text)
+          appendMessage('my_message', text)
       }
 
       const appendRobotMessage = (text) => {
-        appendMessage('robot_message', text)
+          appendMessage('robot_message', text)
       }
 
       const sendMessage = async () => {
-        const textarea = document.getElementById('intent')
-        const button = document.getElementById('submit')
-        const loading = document.getElementById('loading')
-        if (textarea.value) {
-          button.disabled = true
-          loading.style.display = 'block'
-          console.log(textarea.value)
-          try {
-            appendUserMessage(textarea.value)
-            const response = await fetch('/api/llm/chat', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({ question: textarea.value })
-            })
-            console.log(response)
-            const responseData = await response.json()
-            console.log(responseData)
-            const answer = responseData.message
-            console.log(answer)
-            appendRobotMessage(answer)
-          } catch (error) {
-            console.error('Error during fetch operation:', error)
-            appendRobotMessage(error.message)
-          } finally {
-            button.disabled = false
-            loading.style.display = 'none'
-            textarea.value = ''
-            const chatContainer = document.getElementById('chat-box')
-            chatContainer.scrollTop = chatContainer.scrollHeight
+          const textarea = document.getElementById('intent')
+          const button = document.getElementById('submit')
+          const loading = document.getElementById('loading')
+          if (textarea.value) {
+              button.disabled = true
+              loading.style.display = 'block'
+              console.log(textarea.value)
+              try {
+                  appendUserMessage(textarea.value)
+                  const response = await fetch('/api/llm/chat', {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify({question: textarea.value})
+                  })
+                  console.log(response)
+                  const responseData = await response.json()
+                  console.log(responseData)
+                  const answer = responseData.message
+                  console.log(answer)
+                  appendRobotMessage(answer)
+              } catch (error) {
+                  console.error('Error during fetch operation:', error)
+                  appendRobotMessage(error.message)
+              } finally {
+                  button.disabled = false
+                  loading.style.display = 'none'
+                  textarea.value = ''
+                  textarea.style.height = 'auto'
+                  const chatContainer = document.getElementById('chat-box')
+                  chatContainer.scrollTop = chatContainer.scrollHeight
+              }
           }
-        }
       }
-    </script>
-  </head>
-  <body>
-    <div class="container">
-      <div class="chat-container">
-        <header class="header">
-          <span class="header-title"> LLM Web Service </span>
-        </header>
+  </script>
+</head>
+<body>
+<div class="container">
+  <div class="chat-container">
+    <header class="header">
+      <span class="header-title"> LLM Web Service </span>
+    </header>
 
-        <div class="content">
-          <div id="chat-box" class="chat-box"></div>
-        </div>
-
-        <footer class="footer">
-          <textarea id="intent" class="input" required placeholder="Message LLM..."></textarea>
-          <button id="submit" class="button" onclick="sendMessage()">Send</button>
-        </footer>
-
-        <div id="loading">Loading...</div>
-      </div>
-
-      <div class="copyright">All Rights Reserved © Ruobing Shang</div>
+    <div class="content">
+      <div id="chat-box" class="chat-box"></div>
     </div>
-  </body>
-  <script>
+
+    <footer class="footer">
+      <textarea id="intent" class="input" required placeholder="Message LLM..."></textarea>
+      <button id="submit" class="button" onclick="sendMessage()">Send</button>
+    </footer>
+
+    <div id="loading">Loading...</div>
+  </div>
+
+  <div class="copyright">All Rights Reserved © Ruobing Shang</div>
+</div>
+</body>
+<script>
     const textarea = document.getElementById('intent')
     textarea.addEventListener('input', function () {
-      this.style.height = 'auto'
-      this.style.height = this.scrollHeight + 'px'
+        this.style.height = 'auto'
+        this.style.height = this.scrollHeight + 'px'
     })
-  </script>
+</script>
 </html>
