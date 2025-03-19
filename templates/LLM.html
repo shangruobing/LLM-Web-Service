@@ -109,16 +109,19 @@
                   padding: 0 12px;
                   border-radius: 10px;
                   text-align: left;
-                  font-weight: 500;
-                  line-height: 1.3em;
-                  font-size: 0.9em;
+                  font-weight: 400;
+                  line-height: 1.5em;
+                  font-size: 1em;
                   max-width: 100%;
                   word-wrap: break-word;
+                  p{
+                      margin: 12px 0;
+                  }
               }
 
               .my_message {
                   justify-content: flex-end;
-                  padding-left: 36px;
+                  padding-left: 24px;
               }
 
               .my_message .message-body {
@@ -132,7 +135,7 @@
 
               .robot_message {
                   justify-content: flex-start;
-                  padding-right: 36px;
+                  padding-right: 24px;
               }
 
               .robot_message .message-body {
@@ -178,8 +181,6 @@
 
       .input {
           padding: 2px 80px 2px 2px;
-          /* min-height: 36px; */
-          /* height: 36px; */
           font-size: 16px;
           line-height: 24px;
           max-height: 180px;
@@ -305,7 +306,7 @@
                   appendRobotMessage(answer)
               } catch (error) {
                   console.error('Error during fetch operation:', error)
-                  appendRobotMessage(error.message)
+                  appendRobotMessage("The robot is offline. See you next time.")
               } finally {
                   button.disabled = false
                   loading.style.display = 'none'

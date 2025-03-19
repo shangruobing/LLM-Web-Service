@@ -12,7 +12,7 @@ class FakeModel:
         self.name = "FakeLLM"
 
     def chat(self, tokenizer, question, history):
-        return f"{self.name}: {question}", history
+        return question, history
 
 
 class ChatModel(AbstractModel):
